@@ -31,7 +31,11 @@ app.get('/load', function(req, res)
 {
 	var disk = data.disks[req.query.disk];
 
-	child = exec('sio2bsd ' + disk, function (error, stdout, stderr)
+	var fullpath = dirStack.join('/') + '/' + '"' + disk + '"';
+
+	console.log('Path: ' + fullpath);
+
+	child = exec('sio2bsd ' + fullpath, function (error, stdout, stderr)
 	{
     	if(error !== null)
     	{
