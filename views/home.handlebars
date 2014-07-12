@@ -1,15 +1,19 @@
 <h1>PiSION</h1>
 
+<h1>{{message}}</h1>
+
 <h2>Directories</h2>
+<a href="/up">Back</a>
+
 <ul>
 {{#each dirs}}
-	<li>{{this}}</li>
+	<li><a href="/dir?dir={{@index}}">{{this}}</a></li>
 {{/each}}
 </ul>
 
 <h2>Files</h2>
 <ul>
 {{#each disks}}
-	<li>{{this}}</li>
+	<li><a href="/load?disk={{@index}}">{{this}}</li>
 {{/each}}
 </ul>
