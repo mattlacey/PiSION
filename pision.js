@@ -31,7 +31,13 @@ app.get('/load', function(req, res)
 {
 	var disk = data.disks[req.query.disk];
 
-	var fullpath = dirStack.join('/') + '/' + '"' + disk + '"';
+	var fullpath = '"' + dirStack.join('/') + '/' + disk + '"';
+
+	if(child)
+	{
+		child.kill();
+		child = null;
+	}
 
 	console.log('Path: ' + fullpath);
 
