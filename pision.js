@@ -13,7 +13,10 @@ app.engine('handlebars', handlebars({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
 var startDir = (process.argv.length > 2 ? process.argv[2] : '.');
+var command = (process.argv.length > 3 ? process.argv[3] : 'sio2bsd');
 var dirStack = [];
+
+console.log('Using command: ' + command);
 
 var data =
 {
@@ -41,20 +44,20 @@ app.get('/load', function(req, res)
 
 	console.log('Path: ' + fullpath);
 
-	child = exec('sio2bsd ' + fullpath, function (error, stdout, stderr)
+	child = exec(command + ' ' + fullpath, function (error, stdout, stderr)
 	{
     	if(error !== null)
     	{
 			console.log('exec error: ' + error);
 			data.message = 'Error: ' + error;
 		}
-		else
-		{
-			data.message = 'Loaded: ' + disk;		
-		}
-
-		res.render('home', data);
     });
+
+	if(child)
+	{
+		data.message = 'Loaded: ' + disk;		
+		res.render('home', data);
+	}
 });
 
 app.get('/dir', function(req, res)
