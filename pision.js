@@ -34,7 +34,7 @@ app.get('/load', function(req, res)
 {
 	var disk = data.disks[req.query.disk];
 
-	var fullpath = '"' + dirStack.join('/') + '/' + disk + '"';
+	var fullpath = dirStack.join('/') + '/' + disk;
 	var next;
 
 	if(child)
@@ -44,9 +44,11 @@ app.get('/load', function(req, res)
 		child = null;
 	}
 
+	var args = [fullpath, process.cwd() + '/blank.atr'];
+
 	console.log('Running: ' + command + ' with ' + fullpath);
 
-	child = exec(command, [fullpath]);
+	child = exec(command, args);
 
 	if(child)
 	{
