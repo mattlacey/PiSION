@@ -5,7 +5,7 @@ var express = require('express');
 var handlebars = require('express3-handlebars');
 var fs = require('fs');
 var path = require('path');
-var exec = require('child_process').exec, child;
+var exec = require('child_process').spawn, child;
 
 var app = express();
 
@@ -35,23 +35,18 @@ app.get('/load', function(req, res)
 	var disk = data.disks[req.query.disk];
 
 	var fullpath = '"' + dirStack.join('/') + '/' + disk + '"';
+	var next;
 
 	if(child)
 	{
+		console.log('Sending kill to PID ' + child.pid);
 		child.kill();
 		child = null;
 	}
 
-	console.log('Path: ' + fullpath);
+	console.log('Running: ' + command + ' with ' + fullpath);
 
-	child = exec(command + ' ' + fullpath, function (error, stdout, stderr)
-	{
-    	if(error !== null)
-    	{
-			console.log('exec error: ' + error);
-			data.message = 'Error: ' + error;
-		}
-    });
+	child = exec(command, [fullpath]);
 
 	if(child)
 	{
