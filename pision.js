@@ -30,13 +30,24 @@ app.get('/', function(req, res)
 	listDirectory(startDir, res);
 });
 
+app.get('/basic', function(req, res)
+{
+	var args = [process.cwd() + '/basicfiles.atr'];
+	runCommand(args, 'BASIC', res);
+});
+
 app.get('/load', function(req, res)
 {
 	var disk = data.disks[req.query.disk];
-
 	var fullpath = dirStack.join('/') + '/' + disk;
-	var next;
+	var args = [fullpath, process.cwd() + '/blank.atr'];
 
+	runCommand(args, disk, res);
+
+});
+
+function runCommand(args, message, res)
+{
 	if(child)
 	{
 		console.log('Sending kill to PID ' + child.pid);
@@ -44,18 +55,16 @@ app.get('/load', function(req, res)
 		child = null;
 	}
 
-	var args = [fullpath, process.cwd() + '/blank.atr'];
-
-	console.log('Running: ' + command + ' with ' + fullpath);
+	console.log('Running: ' + command + ' with ' + args);
 
 	child = exec(command, args);
 
 	if(child)
 	{
-		data.message = 'Loaded: ' + disk;		
+		data.message = 'Loaded: ' + message;		
 		res.render('home', data);
 	}
-});
+}
 
 app.get('/dir', function(req, res)
 {
@@ -100,12 +109,12 @@ function listDirectory(dir, res)
 		{
 			data.disks = files.filter(function(value)
 			{
-				return path.extname(value) !== '';
+				return fs.lstatSync(dir + '/' + value).isFile();
 			});
 
 			data.dirs = files.filter(function(value)
 			{
-				return path.extname(value) === '';
+				return fs.lstatSync(dir + '/' + value).isDirectory();
 			});
 
 			data.message = 'Current Directory: ' + dir;			
