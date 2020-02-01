@@ -1,19 +1,35 @@
+
+<style type="text/css">
+	.directory
+	{
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	.entry
+	{
+		display: inline-block;
+		padding: 8px;
+	}
+
+</style>
+
 <h1>PiSION</h1>
 
 <h1>{{message}}</h1>
 
 <h2>Directories</h2>
-<a href="/basic">BASIC</a>/<a href="/up">Back</a>
+<a href="/8bit/basic">BASIC</a>/<a href="/8bit/up">Back</a>
 
-<ul>
+<div class="directory">
 {{#each dirs}}
-	<li><a href="/dir?dir={{@index}}">{{this}}</a></li>
+	<div class="entry"><a href="/8bit/dir?dir={{@index}}">{{this}}</a></div>
 {{/each}}
-</ul>
+</div>
 
 <h2>Files</h2>
-<ul>
+<div class="directory">
 {{#each disks}}
-	<li><a href="/load?disk={{@index}}">{{this}}</li>
+	<div class="entry"><a href="/8bit/load?disk={{@index}}">{{this}}</div>
 {{/each}}
-</ul>
+</div>

@@ -16,6 +16,8 @@ var startDir = (process.argv.length > 2 ? process.argv[2] : '.');
 var command = (process.argv.length > 3 ? process.argv[3] : 'sio2bsd');
 var dirStack = [];
 
+var root = '/8bit';
+
 console.log('Using command: ' + command);
 
 var data =
@@ -25,18 +27,18 @@ var data =
 	message: ''
 };
 
-app.get('/', function(req, res)
+app.get(root, function(req, res)
 {
 	listDirectory(startDir, res);
 });
 
-app.get('/basic', function(req, res)
+app.get(root + '/basic', function(req, res)
 {
 	var args = [process.cwd() + '/basicfiles.atr'];
 	runCommand(args, 'BASIC', res);
 });
 
-app.get('/load', function(req, res)
+app.get(root + '/load', function(req, res)
 {
 	var disk = data.disks[req.query.disk];
 	var fullpath = dirStack.join('/') + '/' + disk;
@@ -66,13 +68,13 @@ function runCommand(args, message, res)
 	}
 }
 
-app.get('/dir', function(req, res)
+app.get(root + '/dir', function(req, res)
 {
 	var dir = data.dirs[req.query.dir];
 	listDirectory(dir, res);
 });
 
-app.get('/up', function(req, res)
+app.get(root + '/up', function(req, res)
 {
 
 	if(dirStack.length > 1)
